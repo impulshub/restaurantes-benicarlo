@@ -1,18 +1,726 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Directorio de restaurantes de Benicarló. Encuentra los mejores restaurantes, marisquerías, arrocerías y más. Información de contacto, menús, reseñas y reservas." />
-    <meta name="keywords" content="restaurantes Benicarló, comer Benicarló, alcachofa Benicarló, mariscos Castellón, arroces mediterráneos" />
-    <meta property="og:title" content="Restaurantes de Benicarló - Directorio Gastronómico" />
-    <meta property="og:description" content="Descubre los mejores restaurantes de Benicarló. Cocina mediterránea, mariscos frescos y la famosa alcachofa con D.O." />
-    <meta property="og:type" content="website" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Restaurantes de Benicarló - Directorio Gastronómico</title>
-  </head>
-  <body>
+    <meta name="description" content="Directorio de restaurantes de Benicarló. Encuentra los mejores restaurantes, marisquerías, arrocerías y más.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #10b981; border-radius: 4px; }
+    </style>
+</head>
+<body>
     <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+    <script type="text/babel">
+// Base de datos de restaurantes de Benicarló
+const restaurantesData = [
+  {
+    id: 1,
+    nombre: "Raúl Resino Restaurante",
+    descripcion: "Restaurante con estrella Michelin especializado en productos del mar. El chef madrileño Raúl Resino ofrece menús degustación sorpresa con mariscos, pescados y verduras del Baix Maestrat.",
+    tipoCocina: ["Alta Gastronomía", "Mediterránea", "Mariscos"],
+    rangoPrecios: "€€€€",
+    precioMedio: "80-120€",
+    direccion: "C/ d'Alacant nº2, esquina con l'Avinguda Catalunya",
+    codigoPostal: "12580",
+    telefono: "964 86 55 05",
+    whatsapp: "964865505",
+    web: "https://www.restauranteraulresino.com",
+    email: "info@restauranteraulresino.com",
+    horario: { martes: "13:30-17:00", miercoles: "13:30-17:00", jueves: "13:30-17:00", viernes: "13:30-17:00, 21:00-00:30", sabado: "13:30-17:00, 21:00-00:30", domingo: "Cerrado", lunes: "Cerrado" },
+    reservas: "https://www.restauranteraulresino.com/reservasonline",
+    facebook: "https://www.facebook.com/raulresinorestarante",
+    instagram: "https://www.instagram.com/raulresino",
+    googleMaps: "https://maps.google.com/?q=Raul+Resino+Restaurante+Benicarlo",
+    tripadvisor: "https://www.tripadvisor.com/Restaurant_Review-g673865-d3331138-Reviews-Raul_Resino-Benicarlo.html",
+    distintivos: ["⭐ Estrella Michelin", "🌞🌞 2 Soles Guía Repsol"],
+    puntuacion: 4.8,
+    numResenas: 245,
+    resenas: [
+      { autor: "María G.", texto: "Experiencia gastronómica sublime. El menú degustación es un viaje sensorial increíble.", puntuacion: 5, fecha: "Noviembre 2025" },
+      { autor: "Carlos P.", texto: "La ostra del Delta del Ebro con granizado de cava es simplemente perfecta.", puntuacion: 5, fecha: "Octubre 2025" },
+      { autor: "Ana L.", texto: "Vale cada euro. Productos de proximidad elevados a la máxima expresión.", puntuacion: 5, fecha: "Septiembre 2025" }
+    ],
+    menu: [
+      { nombre: "Menú Degustación Sorpresa", precio: "95€", descripcion: "Experiencia completa con maridaje de vinos" },
+      { nombre: "Menú Corto", precio: "65€", descripcion: "Selección de 5 platos del chef" }
+    ],
+    especialidades: ["Ostra rizada del Delta del Ebro", "Langostino de Vinaròs", "Alcachofa de Benicarló"],
+    imagen: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800",
+    caracteristicas: ["Romántico", "Íntimo", "Parking cercano", "Accesible"],
+    capacidad: 30
+  },
+  {
+    id: 2,
+    nombre: "Hogar del Pescador",
+    descripcion: "Restaurante mediterráneo ubicado en la histórica primera lonja de pescado de 1930. Especializado en arroces, mariscos y pescados frescos del día con terraza con vistas.",
+    tipoCocina: ["Mediterránea", "Arroces", "Mariscos"],
+    rangoPrecios: "€€€",
+    precioMedio: "35-55€",
+    direccion: "Avenida del Marqués de Benicarló, 29",
+    codigoPostal: "12580",
+    telefono: "964 96 58 05",
+    whatsapp: "669352469",
+    web: "http://www.hogardelpescador.com",
+    email: "gerencia@hogarpescador.com",
+    horario: { lunes: "13:00-16:00, 20:00-23:00", martes: "13:00-16:00, 20:00-23:00", miercoles: "Cerrado", jueves: "13:00-16:00, 20:00-23:00", viernes: "13:00-16:00, 20:00-23:30", sabado: "13:00-16:00, 20:00-23:30", domingo: "13:00-16:30" },
+    reservas: "https://www.thefork.es/restaurante/hogar-del-pescador-benicarlo-r829858",
+    facebook: "https://www.facebook.com/hogardelpescadorbenicarlo",
+    instagram: "https://www.instagram.com/hogarpescadorbenicarlo",
+    googleMaps: "https://maps.google.com/?q=Hogar+del+Pescador+Benicarlo",
+    tripadvisor: "https://www.tripadvisor.com/Restaurant_Review-g673865-d13476590-Reviews-Hogar_del_Pescador-Benicarlo.html",
+    distintivos: ["🏛️ Edificio Histórico 1930", "📍 TheFork 9/10"],
+    puntuacion: 4.5,
+    numResenas: 523,
+    resenas: [
+      { autor: "Pedro M.", texto: "El arroz con bogavante es espectacular. El edificio histórico le da un encanto especial.", puntuacion: 5, fecha: "Diciembre 2025" },
+      { autor: "Laura S.", texto: "Mariscos fresquísimos y el personal muy atento. La terraza en verano es una maravilla.", puntuacion: 4, fecha: "Noviembre 2025" },
+      { autor: "Roberto F.", texto: "Relación calidad-precio excelente. Los arroces son su punto fuerte.", puntuacion: 5, fecha: "Octubre 2025" }
+    ],
+    menu: [
+      { nombre: "Menú del Día", precio: "18€", descripcion: "Entrante + principal + postre + bebida" },
+      { nombre: "Menú Degustación Marinero", precio: "45€", descripcion: "Mariscada + arroz + postre" }
+    ],
+    especialidades: ["Arroz con bogavante", "Fideuá", "Mariscada del día", "Suquet de rape"],
+    imagen: "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=800",
+    caracteristicas: ["Terraza", "Vistas al mar", "Grupos", "Parking"],
+    capacidad: 120
+  },
+  {
+    id: 3,
+    nombre: "Cor de Carxofa",
+    descripcion: "Restaurante de autor vegetariano y vegano, 100% sin gluten y ecológico. Especializado en productos Km.0 con la alcachofa de Benicarló como protagonista.",
+    tipoCocina: ["Vegetariano", "Vegano", "Ecológico", "Sin Gluten"],
+    rangoPrecios: "€€",
+    precioMedio: "25-40€",
+    direccion: "Avenida Marquès de Benicarló, 27",
+    codigoPostal: "12580",
+    telefono: "964 100 323",
+    whatsapp: "964100323",
+    web: "https://www.cordecarxofa.com",
+    email: "info@cordecarxofa.com",
+    horario: { lunes: "Cerrado", martes: "13:00-16:00", miercoles: "13:00-16:00", jueves: "13:00-16:00, 20:30-23:00", viernes: "13:00-16:00, 20:30-23:00", sabado: "13:00-16:00, 20:30-23:00", domingo: "13:00-16:00" },
+    reservas: "https://www.cordecarxofa.com/contacto",
+    facebook: "https://www.facebook.com/cordecarxofa",
+    instagram: "https://www.instagram.com/cordecarxofa",
+    googleMaps: "https://maps.google.com/?q=Cor+de+Carxofa+Benicarlo",
+    tripadvisor: "https://www.tripadvisor.com/Restaurant_Review-g673865-d14161946-Reviews-Cor_de_Carxofa-Benicarlo.html",
+    distintivos: ["🌱 Slow Food", "🥬 We're Smart Green Guide", "🐕 Dog Friendly"],
+    puntuacion: 4.7,
+    numResenas: 312,
+    resenas: [
+      { autor: "Elena V.", texto: "Increíble encontrar un restaurante así. Todo ecológico, delicioso y con opciones para celíacos.", puntuacion: 5, fecha: "Diciembre 2025" },
+      { autor: "Miguel A.", texto: "Los corazones de alcachofa crujientes son adictivos. Mousse casera de 10.", puntuacion: 5, fecha: "Noviembre 2025" },
+      { autor: "Sara T.", texto: "Nos encantó poder ir con nuestro perro. Comida creativa y sabrosa.", puntuacion: 4, fecha: "Octubre 2025" }
+    ],
+    menu: [
+      { nombre: "Menú Eco del Día", precio: "22€", descripcion: "3 platos con productos de temporada" },
+      { nombre: "Menú Degustación Vegano", precio: "35€", descripcion: "5 platos + postre" }
+    ],
+    especialidades: ["Corazones de alcachofa crujientes", "Paella vegana", "Burritos con Heura", "Mousses caseras"],
+    imagen: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800",
+    caracteristicas: ["Vegano", "Sin Gluten", "Ecológico", "Pet Friendly", "Km.0"],
+    capacidad: 45
+  },
+  {
+    id: 4,
+    nombre: "Pau Restaurant",
+    descripcion: "Restaurante de cocina mediterránea de autor junto al puerto de Benicarló. Famoso por sus jornadas gastronómicas de la alcachofa y menús temáticos de temporada.",
+    tipoCocina: ["Mediterránea", "De Autor", "Arroces"],
+    rangoPrecios: "€€€",
+    precioMedio: "35-50€",
+    direccion: "Avinguda Marqués de Benicarló, 11",
+    codigoPostal: "12580",
+    telefono: "964 47 05 46",
+    whatsapp: "964470546",
+    web: "https://www.pau-restaurant.com",
+    email: "reservas@pau-restaurant.com",
+    horario: { lunes: "Cerrado", martes: "13:00-15:30", miercoles: "13:00-15:30", jueves: "13:00-15:30, 21:00-23:30", viernes: "13:00-15:30, 21:00-23:30", sabado: "13:00-15:30, 21:00-23:30", domingo: "13:00-15:30" },
+    reservas: "https://www.thefork.es/restaurante/pau-restaurant-benicarlo",
+    facebook: "https://www.facebook.com/pau.restaurant",
+    instagram: "https://www.instagram.com/paurestaurant",
+    googleMaps: "https://maps.google.com/?q=Pau+Restaurant+Benicarlo",
+    tripadvisor: "https://www.tripadvisor.com/Restaurant_Review-g673865-d1234567-Reviews-Pau_Restaurant-Benicarlo.html",
+    distintivos: ["🎖️ Cocina de Autor", "🥬 Jornadas de la Alcachofa"],
+    puntuacion: 4.4,
+    numResenas: 287,
+    resenas: [
+      { autor: "Juan C.", texto: "El menú temático de alcachofas es una delicia. Cada plato una sorpresa.", puntuacion: 5, fecha: "Enero 2026" },
+      { autor: "Marta R.", texto: "Muy buena relación calidad-precio. El arroz negro espectacular.", puntuacion: 4, fecha: "Diciembre 2025" },
+      { autor: "Antonio G.", texto: "Ubicación perfecta junto al puerto. Productos frescos y bien elaborados.", puntuacion: 4, fecha: "Noviembre 2025" }
+    ],
+    menu: [
+      { nombre: "Menú del Día", precio: "17€", descripcion: "Primero + segundo + postre + bebida" },
+      { nombre: "Menú Alcachofa (temporada)", precio: "38€", descripcion: "5 platos con alcachofa protagonista" },
+      { nombre: "Menú Degustación", precio: "45€", descripcion: "Experiencia completa del chef" }
+    ],
+    especialidades: ["Alcachofas en todas sus formas", "Arroz negro", "Fideuá", "Postres caseros"],
+    imagen: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800",
+    caracteristicas: ["Junto al Puerto", "Salón Privado", "Terraza", "Grupos"],
+    capacidad: 70
+  },
+  {
+    id: 5,
+    nombre: "Parador de Benicarló",
+    descripcion: "Restaurante del Parador Nacional con vistas al mar y al castillo de Peñíscola. Especializado en arroces, alcachofa con D.O. y productos del Mediterráneo.",
+    tipoCocina: ["Mediterránea", "Arroces", "Regional"],
+    rangoPrecios: "€€€",
+    precioMedio: "40-60€",
+    direccion: "Avda. Papa Luna, 5",
+    codigoPostal: "12580",
+    telefono: "964 47 01 00",
+    whatsapp: "964470100",
+    web: "https://paradores.es/es/parador-de-benicarlo",
+    email: "benicarlo@parador.es",
+    horario: { lunes: "13:00-16:00, 20:00-23:00", martes: "13:00-16:00, 20:00-23:00", miercoles: "13:00-16:00, 20:00-23:00", jueves: "13:00-16:00, 20:00-23:00", viernes: "13:00-16:00, 20:00-23:30", sabado: "13:00-16:00, 20:00-23:30", domingo: "13:00-16:00, 20:00-23:00" },
+    reservas: "https://paradores.es/es/parador-de-benicarlo#restaurante",
+    facebook: "https://www.facebook.com/Parabordebenicarlo",
+    instagram: "https://www.instagram.com/paabordebenicarlo",
+    googleMaps: "https://maps.google.com/?q=Parador+de+Benicarlo",
+    tripadvisor: "https://www.tripadvisor.com/Restaurant_Review-g673865-d4137912-Reviews-Parador_de_Benicarlo-Benicarlo.html",
+    distintivos: ["🏨 Parador Nacional", "🌅 Vistas al Mar", "🥬 Alcachofa D.O."],
+    puntuacion: 4.3,
+    numResenas: 456,
+    resenas: [
+      { autor: "Fernando L.", texto: "Cenar en la terraza viendo el atardecer y Peñíscola es mágico. Arroces excelentes.", puntuacion: 5, fecha: "Agosto 2025" },
+      { autor: "Carmen D.", texto: "Las jornadas de la alcachofa son imperdibles. Producto de D.O. tratado con mimo.", puntuacion: 4, fecha: "Febrero 2025" },
+      { autor: "Luis M.", texto: "La Arrocería de verano junto a la piscina es una experiencia única.", puntuacion: 5, fecha: "Julio 2025" }
+    ],
+    menu: [
+      { nombre: "Menú del Día", precio: "28€", descripcion: "Incluye vino y café" },
+      { nombre: "Menú Gastronómico", precio: "55€", descripcion: "Degustación de productos locales" },
+      { nombre: "Menú Arrocería (verano)", precio: "35€", descripcion: "Arroz + ensalada + postre" }
+    ],
+    especialidades: ["Arroz de pescado y verduras", "Calamares en su tinta", "Alcachofa con D.O.", "Quesos del Maestrazgo"],
+    imagen: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800",
+    caracteristicas: ["Vistas al Mar", "Terraza", "Piscina", "Hotel", "Parking Gratuito"],
+    capacidad: 150
+  },
+  {
+    id: 6,
+    nombre: "El Cortijo - Hermanos Rico",
+    descripcion: "Restaurante tradicional especializado en mariscos, arroces marineros y carnes. Amplio complejo con salones para eventos, terraza El Burladero con música en vivo.",
+    tipoCocina: ["Mediterránea", "Mariscos", "Carnes", "Arroces"],
+    rangoPrecios: "€€€",
+    precioMedio: "45-60€",
+    direccion: "Calle de Méndez Núñez, 85",
+    codigoPostal: "12580",
+    telefono: "964 47 00 75",
+    whatsapp: "964470075",
+    web: "https://www.elcortijobenicarlo.es",
+    email: "info@elcortijobenicarlo.es",
+    horario: { lunes: "13:00-16:00, 20:00-23:00", martes: "13:00-16:00, 20:00-23:00", miercoles: "13:00-16:00, 20:00-23:00", jueves: "13:00-16:00, 20:00-23:00", viernes: "13:00-16:00, 20:00-00:00", sabado: "13:00-16:00, 20:00-00:00", domingo: "13:00-17:00" },
+    reservas: "https://www.elcortijobenicarlo.es/reservas",
+    facebook: "https://www.facebook.com/elcortijobenicarlo",
+    instagram: "https://www.instagram.com/elcortijobenicarlo",
+    googleMaps: "https://maps.google.com/?q=El+Cortijo+Hermanos+Rico+Benicarlo",
+    tripadvisor: "https://www.tripadvisor.com/Restaurant_Review-g673865-d23579337-Reviews-El_Cortijo-Benicarlo.html",
+    distintivos: ["🎉 Bodas y Eventos", "🎵 Música en Vivo", "👨‍👩‍👧 Zona Infantil"],
+    puntuacion: 4.5,
+    numResenas: 389,
+    resenas: [
+      { autor: "Patricia H.", texto: "Celebramos nuestra boda aquí y fue perfecto. Atención increíble y comida exquisita.", puntuacion: 5, fecha: "Septiembre 2025" },
+      { autor: "Jorge B.", texto: "El marisco es de primera calidad. La alcachofa preparada de forma espectacular.", puntuacion: 5, fecha: "Noviembre 2025" },
+      { autor: "Isabel N.", texto: "La terraza El Burladero con música en directo es genial para el vermut.", puntuacion: 4, fecha: "Agosto 2025" }
+    ],
+    menu: [
+      { nombre: "Menú del Día", precio: "16€", descripcion: "Completo con bebida" },
+      { nombre: "Menú Celebraciones", precio: "55€", descripcion: "Para grupos y eventos" },
+      { nombre: "Carta Marisquería", precio: "Variable", descripcion: "Marisco fresco del día" }
+    ],
+    especialidades: ["Mariscada", "Alcachofa de Benicarló", "Arroz marinero", "Carnes a la brasa"],
+    imagen: "https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?w=800",
+    caracteristicas: ["Salones Privados", "Terraza", "Música en Vivo", "Zona Infantil", "Bodas", "Parking"],
+    capacidad: 400
+  },
+  {
+    id: 7,
+    nombre: "Restaurante Mauro",
+    descripcion: "Auténtica pizzería italiana con cocina tradicional hecha en casa. Pizzas al horno de leña, pastas frescas y postres caseros a precios muy asequibles.",
+    tipoCocina: ["Italiana", "Pizzería"],
+    rangoPrecios: "€",
+    precioMedio: "12-20€",
+    direccion: "Calle Mayor, 45",
+    codigoPostal: "12580",
+    telefono: "964 47 12 34",
+    whatsapp: "964471234",
+    web: "https://www.restaurantemauro.es",
+    email: "info@restaurantemauro.es",
+    horario: { lunes: "Cerrado", martes: "13:00-16:00, 20:00-23:00", miercoles: "13:00-16:00, 20:00-23:00", jueves: "13:00-16:00, 20:00-23:00", viernes: "13:00-16:00, 20:00-23:30", sabado: "13:00-16:00, 20:00-23:30", domingo: "13:00-16:00" },
+    reservas: "https://www.restaurantemauro.es/reservas",
+    facebook: "https://www.facebook.com/restaurantemaurobenicarlo",
+    instagram: "https://www.instagram.com/restaurantemauro",
+    googleMaps: "https://maps.google.com/?q=Restaurante+Mauro+Benicarlo",
+    tripadvisor: "https://www.tripadvisor.com/Restaurant_Review-g673865-d7654321-Reviews-Restaurante_Mauro-Benicarlo.html",
+    distintivos: ["🍕 Horno de Leña", "💰 Económico", "🏠 Cocina Casera"],
+    puntuacion: 4.4,
+    numResenas: 567,
+    resenas: [
+      { autor: "David R.", texto: "Las mejores pizzas de la zona. Masa fina, ingredientes frescos y precio imbatible.", puntuacion: 5, fecha: "Diciembre 2025" },
+      { autor: "Cristina M.", texto: "Pasta casera deliciosa. El tiramisú es de los mejores que he probado.", puntuacion: 4, fecha: "Noviembre 2025" },
+      { autor: "Alberto S.", texto: "Perfecto para ir en familia. Ambiente acogedor y servicio rápido.", puntuacion: 4, fecha: "Octubre 2025" }
+    ],
+    menu: [
+      { nombre: "Menú del Día", precio: "11€", descripcion: "Pizza/pasta + bebida + café" },
+      { nombre: "Pizza Familiar", precio: "15€", descripcion: "Pizza XXL a elegir" }
+    ],
+    especialidades: ["Pizza Quattro Formaggi", "Lasaña casera", "Pasta carbonara", "Tiramisú"],
+    imagen: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800",
+    caracteristicas: ["Familiar", "Económico", "Para llevar", "A domicilio"],
+    capacidad: 50
+  },
+  {
+    id: 8,
+    nombre: "Casa Pocho",
+    descripcion: "El restaurante marisquero más antiguo de la zona, desde 1938. Tradición marinera con langostinos de Vinaròs preparados de múltiples formas. Una institución local.",
+    tipoCocina: ["Mariscos", "Tradicional", "Mediterránea"],
+    rangoPrecios: "€€€",
+    precioMedio: "40-55€",
+    direccion: "Calle San Francisco, 12, Vinaròs",
+    codigoPostal: "12500",
+    telefono: "964 45 10 95",
+    whatsapp: "964451095",
+    web: "https://www.casapocho.es",
+    email: "reservas@casapocho.es",
+    horario: { lunes: "Cerrado", martes: "13:30-16:00, 20:30-22:30", miercoles: "13:30-16:00, 20:30-22:30", jueves: "13:30-16:00, 20:30-22:30", viernes: "13:30-16:00, 20:30-23:00", sabado: "13:30-16:00, 20:30-23:00", domingo: "13:30-16:00" },
+    reservas: "tel:964451095",
+    facebook: "https://www.facebook.com/casapocho",
+    instagram: "https://www.instagram.com/casapocho",
+    googleMaps: "https://maps.google.com/?q=Casa+Pocho+Vinaros",
+    tripadvisor: "https://www.tripadvisor.com/Restaurant_Review-g580335-d993578-Reviews-Casa_Pocho-Vinaros.html",
+    distintivos: ["📜 Desde 1938", "🦐 Langostinos de Vinaròs", "🏆 Tradición Marinera"],
+    puntuacion: 4.0,
+    numResenas: 198,
+    resenas: [
+      { autor: "Ramón P.", texto: "Langostinos al ron espectaculares. 85 años de tradición se notan en cada plato.", puntuacion: 5, fecha: "Noviembre 2025" },
+      { autor: "Teresa G.", texto: "Las variaciones Pocho son un viaje por los sabores del mar. Imprescindible.", puntuacion: 4, fecha: "Octubre 2025" },
+      { autor: "Vicente L.", texto: "Ambiente familiar y auténtico. El suquet de rodaballo memorable.", puntuacion: 4, fecha: "Septiembre 2025" }
+    ],
+    menu: [
+      { nombre: "Menú Pocho", precio: "35€", descripcion: "Degustación de especialidades de la casa" },
+      { nombre: "Variaciones Pocho", precio: "45€", descripcion: "Langostinos en todas sus preparaciones" }
+    ],
+    especialidades: ["Langostinos de Vinaròs al Ron", "Chipironcitos con pasas y piñones", "Suquet de Rodaballo", "Almejas marinera"],
+    imagen: "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=800",
+    caracteristicas: ["Histórico", "Familiar", "Tradicional", "Íntimo"],
+    capacidad: 40
+  }
+];
+
+const tiposCocinaUnicos = [...new Set(restaurantesData.flatMap(r => r.tipoCocina))].sort();
+const rangosPrecios = ["€", "€€", "€€€", "€€€€"];
+const caracteristicasUnicas = [...new Set(restaurantesData.flatMap(r => r.caracteristicas))].sort();
+
+// Iconos SVG inline
+const Icons = {
+  Search: () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>,
+  MapPin: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>,
+  Phone: () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>,
+  Star: ({filled}) => <svg className={`w-4 h-4 ${filled ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`} fill={filled ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" /></svg>,
+  X: () => <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>,
+  Filter: () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" /></svg>,
+  ChevronDown: () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>,
+  ChevronUp: () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" /></svg>,
+  Clock: () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>,
+  Globe: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" /></svg>,
+};
+
+const Estrellas = ({ puntuacion }) => (
+  <div className="flex items-center gap-1">
+    {[1, 2, 3, 4, 5].map((star) => (
+      <Icons.Star key={star} filled={star <= Math.round(puntuacion)} />
+    ))}
+    <span className="ml-1 text-sm font-medium text-gray-700">{puntuacion.toFixed(1)}</span>
+  </div>
+);
+
+const RestaurantCard = ({ restaurante, onClick }) => (
+  <div onClick={onClick} className="bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer transform transition-all duration-300 hover:scale-[1.02] hover:shadow-xl border border-gray-100">
+    <div className="relative h-48 overflow-hidden">
+      <img src={restaurante.imagen} alt={restaurante.nombre} className="w-full h-full object-cover transition-transform duration-500 hover:scale-110" />
+      <div className="absolute top-3 right-3 bg-white px-3 py-1 rounded-full text-sm font-bold text-emerald-600 shadow">{restaurante.rangoPrecios}</div>
+      {restaurante.distintivos.length > 0 && (
+        <div className="absolute bottom-3 left-3 flex flex-wrap gap-1">
+          {restaurante.distintivos.slice(0, 2).map((d, i) => (
+            <span key={i} className="bg-black/70 text-white text-xs px-2 py-1 rounded-full">{d}</span>
+          ))}
+        </div>
+      )}
+    </div>
+    <div className="p-5">
+      <h3 className="text-xl font-bold text-gray-800 mb-2">{restaurante.nombre}</h3>
+      <div className="flex flex-wrap gap-1 mb-3">
+        {restaurante.tipoCocina.slice(0, 3).map((tipo, i) => (
+          <span key={i} className="bg-emerald-50 text-emerald-700 text-xs px-2 py-1 rounded-full">{tipo}</span>
+        ))}
+      </div>
+      <p className="text-gray-600 text-sm mb-3 line-clamp-2">{restaurante.descripcion}</p>
+      <div className="flex items-center justify-between">
+        <Estrellas puntuacion={restaurante.puntuacion} />
+        <span className="text-xs text-gray-500">{restaurante.numResenas} reseñas</span>
+      </div>
+      <div className="mt-3 pt-3 border-t border-gray-100 flex items-center text-sm text-gray-500">
+        <Icons.MapPin />
+        <span className="ml-1 truncate">{restaurante.direccion}</span>
+      </div>
+    </div>
+  </div>
+);
+
+const RestaurantDetail = ({ restaurante, onClose }) => {
+  const [activeTab, setActiveTab] = React.useState('info');
+  const dias = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo'];
+  const diasNombres = { lunes: 'Lunes', martes: 'Martes', miercoles: 'Miércoles', jueves: 'Jueves', viernes: 'Viernes', sabado: 'Sábado', domingo: 'Domingo' };
+
+  return (
+    <div className="fixed inset-0 bg-black/60 z-50 flex items-start justify-center overflow-y-auto p-4 backdrop-blur-sm">
+      <div className="bg-white rounded-3xl w-full max-w-4xl my-8 overflow-hidden shadow-2xl">
+        <div className="relative h-72">
+          <img src={restaurante.imagen} alt={restaurante.nombre} className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+          <button onClick={onClose} className="absolute top-4 right-4 bg-white/90 hover:bg-white p-2 rounded-full shadow-lg transition-all">
+            <Icons.X />
+          </button>
+          <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+            <div className="flex flex-wrap gap-2 mb-3">
+              {restaurante.distintivos.map((d, i) => (
+                <span key={i} className="bg-white/20 backdrop-blur-sm text-white text-sm px-3 py-1 rounded-full">{d}</span>
+              ))}
+            </div>
+            <h2 className="text-3xl font-bold mb-2">{restaurante.nombre}</h2>
+            <div className="flex flex-wrap items-center gap-4">
+              <Estrellas puntuacion={restaurante.puntuacion} />
+              <span className="text-white/80">({restaurante.numResenas} reseñas)</span>
+              <span className="bg-emerald-500 px-3 py-1 rounded-full text-sm font-bold">{restaurante.rangoPrecios} · {restaurante.precioMedio}</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="border-b border-gray-200">
+          <nav className="flex overflow-x-auto">
+            {[{id:'info',label:'Información'},{id:'menu',label:'Carta/Menús'},{id:'resenas',label:'Reseñas'},{id:'contacto',label:'Contacto'}].map((tab) => (
+              <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`px-6 py-4 font-medium whitespace-nowrap transition-colors ${activeTab === tab.id ? 'text-emerald-600 border-b-2 border-emerald-600' : 'text-gray-500 hover:text-gray-700'}`}>
+                {tab.label}
+              </button>
+            ))}
+          </nav>
+        </div>
+
+        <div className="p-6 max-h-96 overflow-y-auto">
+          {activeTab === 'info' && (
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-lg font-semibold mb-2">Sobre el restaurante</h3>
+                <p className="text-gray-600">{restaurante.descripcion}</p>
+              </div>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <h4 className="font-semibold mb-2">🍽️ Tipo de cocina</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {restaurante.tipoCocina.map((tipo, i) => (
+                      <span key={i} className="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-sm">{tipo}</span>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <h4 className="font-semibold mb-2">❤️ Especialidades</h4>
+                  <ul className="text-gray-600 text-sm space-y-1">
+                    {restaurante.especialidades.map((esp, i) => (<li key={i}>• {esp}</li>))}
+                  </ul>
+                </div>
+              </div>
+              <div>
+                <h4 className="font-semibold mb-2">🕐 Horario</h4>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
+                  {dias.map((dia) => (
+                    <div key={dia} className="bg-gray-50 p-2 rounded-lg">
+                      <span className="font-medium">{diasNombres[dia]}</span>
+                      <p className="text-gray-600">{restaurante.horario[dia]}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <h4 className="font-semibold mb-2">✨ Características</h4>
+                <div className="flex flex-wrap gap-2">
+                  {restaurante.caracteristicas.map((car, i) => (
+                    <span key={i} className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">{car}</span>
+                  ))}
+                </div>
+                <p className="text-sm text-gray-500 mt-2">Capacidad: {restaurante.capacidad} comensales</p>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'menu' && (
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-lg font-semibold mb-4">Menús disponibles</h3>
+                <div className="space-y-3">
+                  {restaurante.menu.map((item, i) => (
+                    <div key={i} className="bg-gradient-to-r from-emerald-50 to-teal-50 p-4 rounded-xl border border-emerald-100">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h4 className="font-semibold text-gray-800">{item.nombre}</h4>
+                          <p className="text-gray-600 text-sm">{item.descripcion}</p>
+                        </div>
+                        <span className="text-xl font-bold text-emerald-600">{item.precio}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold mb-3">Platos destacados</h3>
+                <div className="grid md:grid-cols-2 gap-3">
+                  {restaurante.especialidades.map((esp, i) => (
+                    <div key={i} className="flex items-center gap-3 bg-gray-50 p-3 rounded-lg">
+                      <span className="text-2xl">🍽️</span>
+                      <span className="text-gray-700">{esp}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'resenas' && (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold">Reseñas destacadas</h3>
+                <div className="flex items-center gap-2">
+                  <Estrellas puntuacion={restaurante.puntuacion} />
+                  <span className="text-gray-500">({restaurante.numResenas})</span>
+                </div>
+              </div>
+              {restaurante.resenas.map((resena, i) => (
+                <div key={i} className="bg-gray-50 p-4 rounded-xl">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <div className="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 font-bold">{resena.autor.charAt(0)}</div>
+                      <div>
+                        <span className="font-medium">{resena.autor}</span>
+                        <p className="text-xs text-gray-500">{resena.fecha}</p>
+                      </div>
+                    </div>
+                    <div className="flex">
+                      {[...Array(resena.puntuacion)].map((_, j) => (<Icons.Star key={j} filled={true} />))}
+                    </div>
+                  </div>
+                  <p className="text-gray-600 italic">"{resena.texto}"</p>
+                </div>
+              ))}
+              <a href={restaurante.tripadvisor} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 bg-emerald-50 text-emerald-700 py-3 rounded-xl hover:bg-emerald-100 transition-colors">
+                Ver todas las reseñas en TripAdvisor →
+              </a>
+            </div>
+          )}
+
+          {activeTab === 'contacto' && (
+            <div className="space-y-6">
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="bg-gray-50 p-4 rounded-xl">
+                  <h4 className="font-semibold mb-3">📍 Dirección</h4>
+                  <p className="text-gray-600">{restaurante.direccion}</p>
+                  <p className="text-gray-600">{restaurante.codigoPostal} Benicarló</p>
+                  <a href={restaurante.googleMaps} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-emerald-600 hover:text-emerald-700 mt-2 text-sm">
+                    🗺️ Ver en Google Maps
+                  </a>
+                </div>
+                <div className="bg-gray-50 p-4 rounded-xl">
+                  <h4 className="font-semibold mb-3">📞 Teléfono</h4>
+                  <a href={`tel:${restaurante.telefono}`} className="text-xl font-medium text-gray-800 hover:text-emerald-600">{restaurante.telefono}</a>
+                  {restaurante.email && <p className="text-gray-600 mt-2">{restaurante.email}</p>}
+                </div>
+              </div>
+
+              <div>
+                <h4 className="font-semibold mb-3">Redes sociales y perfiles</h4>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  <a href={`https://wa.me/34${restaurante.whatsapp}`} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 bg-green-500 text-white p-3 rounded-xl hover:bg-green-600 transition-colors font-medium">
+                    💬 WhatsApp
+                  </a>
+                  <a href={restaurante.facebook} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 bg-blue-600 text-white p-3 rounded-xl hover:bg-blue-700 transition-colors font-medium">
+                    📘 Facebook
+                  </a>
+                  <a href={restaurante.instagram} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white p-3 rounded-xl hover:from-purple-600 hover:to-pink-600 transition-colors font-medium">
+                    📷 Instagram
+                  </a>
+                  <a href={restaurante.googleMaps} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 bg-red-500 text-white p-3 rounded-xl hover:bg-red-600 transition-colors font-medium">
+                    🗺️ Google
+                  </a>
+                </div>
+                <a href={restaurante.tripadvisor} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 mt-3 bg-emerald-500 text-white p-3 rounded-xl hover:bg-emerald-600 transition-colors font-medium">
+                  🏆 Ver en TripAdvisor
+                </a>
+              </div>
+
+              <a href={restaurante.reservas} target="_blank" rel="noopener noreferrer" className="block w-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white text-center py-4 rounded-xl font-bold text-lg hover:from-emerald-600 hover:to-teal-600 transition-all shadow-lg hover:shadow-xl">
+                🍽️ Reservar Mesa
+              </a>
+
+              {restaurante.web && (
+                <a href={restaurante.web} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 text-emerald-600 hover:text-emerald-700">
+                  🌐 Visitar web oficial
+                </a>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+function App() {
+  const [busqueda, setBusqueda] = React.useState('');
+  const [filtroTipoCocina, setFiltroTipoCocina] = React.useState([]);
+  const [filtroPrecio, setFiltroPrecio] = React.useState([]);
+  const [filtroCaracteristicas, setFiltroCaracteristicas] = React.useState([]);
+  const [mostrarFiltros, setMostrarFiltros] = React.useState(false);
+  const [restauranteSeleccionado, setRestauranteSeleccionado] = React.useState(null);
+  const [ordenar, setOrdenar] = React.useState('puntuacion');
+
+  const restaurantesFiltrados = React.useMemo(() => {
+    let resultado = restaurantesData.filter(r => {
+      const matchBusqueda = busqueda === '' || r.nombre.toLowerCase().includes(busqueda.toLowerCase()) || r.descripcion.toLowerCase().includes(busqueda.toLowerCase()) || r.tipoCocina.some(t => t.toLowerCase().includes(busqueda.toLowerCase())) || r.especialidades.some(e => e.toLowerCase().includes(busqueda.toLowerCase()));
+      const matchTipo = filtroTipoCocina.length === 0 || filtroTipoCocina.some(f => r.tipoCocina.includes(f));
+      const matchPrecio = filtroPrecio.length === 0 || filtroPrecio.includes(r.rangoPrecios);
+      const matchCaracteristicas = filtroCaracteristicas.length === 0 || filtroCaracteristicas.some(f => r.caracteristicas.includes(f));
+      return matchBusqueda && matchTipo && matchPrecio && matchCaracteristicas;
+    });
+    switch(ordenar) {
+      case 'puntuacion': resultado.sort((a, b) => b.puntuacion - a.puntuacion); break;
+      case 'nombre': resultado.sort((a, b) => a.nombre.localeCompare(b.nombre)); break;
+      case 'resenas': resultado.sort((a, b) => b.numResenas - a.numResenas); break;
+      case 'precio-asc': resultado.sort((a, b) => a.rangoPrecios.length - b.rangoPrecios.length); break;
+      case 'precio-desc': resultado.sort((a, b) => b.rangoPrecios.length - a.rangoPrecios.length); break;
+    }
+    return resultado;
+  }, [busqueda, filtroTipoCocina, filtroPrecio, filtroCaracteristicas, ordenar]);
+
+  const toggleFiltro = (tipo, valor) => {
+    const setFiltro = tipo === 'cocina' ? setFiltroTipoCocina : tipo === 'precio' ? setFiltroPrecio : setFiltroCaracteristicas;
+    const filtro = tipo === 'cocina' ? filtroTipoCocina : tipo === 'precio' ? filtroPrecio : filtroCaracteristicas;
+    if (filtro.includes(valor)) setFiltro(filtro.filter(f => f !== valor));
+    else setFiltro([...filtro, valor]);
+  };
+
+  const limpiarFiltros = () => { setBusqueda(''); setFiltroTipoCocina([]); setFiltroPrecio([]); setFiltroCaracteristicas([]); };
+  const filtrosActivos = filtroTipoCocina.length + filtroPrecio.length + filtroCaracteristicas.length;
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50">
+      <header className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white">
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          <div className="text-center mb-6">
+            <h1 className="text-4xl md:text-5xl font-bold mb-2">🍽️ Restaurantes de Benicarló</h1>
+            <p className="text-emerald-100 text-lg">Descubre los mejores sabores del Mediterráneo y la alcachofa con D.O.</p>
+          </div>
+          <div className="max-w-2xl mx-auto relative">
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"><Icons.Search /></div>
+            <input type="text" placeholder="Buscar por nombre, tipo de cocina, especialidad..." value={busqueda} onChange={(e) => setBusqueda(e.target.value)} className="w-full pl-12 pr-4 py-4 rounded-2xl text-gray-800 text-lg shadow-lg focus:outline-none focus:ring-4 focus:ring-emerald-300" />
+          </div>
+        </div>
+      </header>
+
+      <div className="max-w-7xl mx-auto px-4 py-4">
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
+          <button onClick={() => setMostrarFiltros(!mostrarFiltros)} className="flex items-center gap-2 bg-white px-4 py-2 rounded-xl shadow hover:shadow-md transition-shadow">
+            <Icons.Filter />
+            <span>Filtros</span>
+            {filtrosActivos > 0 && <span className="bg-emerald-500 text-white text-xs px-2 py-0.5 rounded-full">{filtrosActivos}</span>}
+            {mostrarFiltros ? <Icons.ChevronUp /> : <Icons.ChevronDown />}
+          </button>
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-gray-500">Ordenar por:</span>
+            <select value={ordenar} onChange={(e) => setOrdenar(e.target.value)} className="bg-white px-3 py-2 rounded-xl shadow text-sm focus:outline-none focus:ring-2 focus:ring-emerald-300">
+              <option value="puntuacion">Mejor valorados</option>
+              <option value="resenas">Más reseñas</option>
+              <option value="nombre">Nombre A-Z</option>
+              <option value="precio-asc">Precio: menor a mayor</option>
+              <option value="precio-desc">Precio: mayor a menor</option>
+            </select>
+          </div>
+          <span className="text-sm text-gray-500">{restaurantesFiltrados.length} restaurante{restaurantesFiltrados.length !== 1 && 's'}</span>
+        </div>
+
+        {mostrarFiltros && (
+          <div className="bg-white p-6 rounded-2xl shadow-lg mb-6 space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="font-semibold text-gray-800">Filtrar resultados</h3>
+              {filtrosActivos > 0 && <button onClick={limpiarFiltros} className="text-sm text-emerald-600 hover:text-emerald-700">Limpiar filtros</button>}
+            </div>
+            <div>
+              <h4 className="text-sm font-medium text-gray-600 mb-2">Tipo de cocina</h4>
+              <div className="flex flex-wrap gap-2">
+                {tiposCocinaUnicos.map((tipo) => (
+                  <button key={tipo} onClick={() => toggleFiltro('cocina', tipo)} className={`px-3 py-1.5 rounded-full text-sm transition-colors ${filtroTipoCocina.includes(tipo) ? 'bg-emerald-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}>{tipo}</button>
+                ))}
+              </div>
+            </div>
+            <div>
+              <h4 className="text-sm font-medium text-gray-600 mb-2">Rango de precios</h4>
+              <div className="flex flex-wrap gap-2">
+                {rangosPrecios.map((precio) => (
+                  <button key={precio} onClick={() => toggleFiltro('precio', precio)} className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${filtroPrecio.includes(precio) ? 'bg-emerald-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}>{precio}</button>
+                ))}
+              </div>
+            </div>
+            <div>
+              <h4 className="text-sm font-medium text-gray-600 mb-2">Características</h4>
+              <div className="flex flex-wrap gap-2">
+                {caracteristicasUnicas.map((car) => (
+                  <button key={car} onClick={() => toggleFiltro('caracteristicas', car)} className={`px-3 py-1.5 rounded-full text-sm transition-colors ${filtroCaracteristicas.includes(car) ? 'bg-emerald-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}>{car}</button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <main className="max-w-7xl mx-auto px-4 pb-12">
+        {restaurantesFiltrados.length > 0 ? (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {restaurantesFiltrados.map((restaurante) => (
+              <RestaurantCard key={restaurante.id} restaurante={restaurante} onClick={() => setRestauranteSeleccionado(restaurante)} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-16">
+            <div className="text-6xl mb-4">🔍</div>
+            <h3 className="text-xl font-semibold text-gray-700 mb-2">No se encontraron restaurantes</h3>
+            <p className="text-gray-500 mb-4">Prueba a modificar los filtros o la búsqueda</p>
+            <button onClick={limpiarFiltros} className="bg-emerald-500 text-white px-6 py-2 rounded-xl hover:bg-emerald-600 transition-colors">Limpiar filtros</button>
+          </div>
+        )}
+      </main>
+
+      <footer className="bg-gray-800 text-white py-8">
+        <div className="max-w-7xl mx-auto px-4 text-center">
+          <p className="text-gray-400 mb-2">🍽️ Directorio de Restaurantes de Benicarló</p>
+          <p className="text-sm text-gray-500">Descubre la gastronomía mediterránea y la alcachofa con D.O.</p>
+          <p className="text-xs text-gray-600 mt-4">© 2025 - Datos informativos, verificar con cada establecimiento</p>
+        </div>
+      </footer>
+
+      {restauranteSeleccionado && <RestaurantDetail restaurante={restauranteSeleccionado} onClose={() => setRestauranteSeleccionado(null)} />}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+</body>
 </html>
